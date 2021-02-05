@@ -1,0 +1,51 @@
+#left-box {
+  position: relative;
+  display: inline-block;
+  width: 50vw;
+  height: 100vh;
+  background-color: beige;
+  vertical-align: top;
+}
+
+#right-box {
+  position: relative;
+  display: inline-block;
+  width: 50vw;
+  height: 100vh;
+  background-color: aqua;
+  vertical-align: top;
+}
+
+#cp {
+  height: 89%;
+  margin: 5%;
+}
+
+#cd {
+  height: 89%;
+  margin: 5%;
+}
+
+#image {
+  width: 100%;
+  height: 40%;
+  border-bottom: 1px solid;
+}
+
+#desc {
+  margin: 5%;
+}
+
+#loading {
+  text-align: center;
+}
+
+#phone-icon {
+  display: inline;
+  width: 500;
+  height: 500;
+}
+
+#address {
+  display: inline;
+}
