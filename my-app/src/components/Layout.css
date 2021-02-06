@@ -19,11 +19,13 @@
 #cp {
   height: 89%;
   margin: 5%;
+  overflow: auto;
 }
 
 #cd {
   height: 89%;
   margin: 5%;
+  overflow: auto;
 }
 
 #image {
@@ -34,6 +36,7 @@
 
 #desc {
   margin: 5%;
+  overflow: auto;
 }
 
 #loading {
@@ -48,4 +51,49 @@
 
 #address {
   display: inline;
+}
+
+/* #category {
+  display: inline;
+  vertical-align: middle;
+} */
+
+#tag {
+  display: inline;
+  vertical-align: middle;
+}
+
+.icons {
+  vertical-align: middle;
+  display: inline;
+  height: 30px;
+  width: 30px;
+  margin-right: 5%;
+}
+
+.entry {
+  margin-top: 5%;
+}
+
+#inner-cp {
+  margin: 5%;
+}
+
+.post-format {
+  border: 1px solid;
+  margin: 5%;
+  /* padding: 2%; */
+}
+
+.post-title {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.post-body {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 5%;
+  margin-right: 5%;
 }
