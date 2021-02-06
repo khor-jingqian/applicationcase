@@ -16,4 +16,5 @@ Objectives completed:
 <li>Added a loading page while waiting for data to be fetched.</li>
 <li>Included buttons to navigate between users in the list.</li>
 <li>Basic Mobile responsiveness implemented, tested on Firefox and Google Chrome. After adjusting the dimensions, please refresh the page for the adjustments to take effect. </li>
+<li>Hosted the website for preview using Github Pages.</li>
 </ol>
