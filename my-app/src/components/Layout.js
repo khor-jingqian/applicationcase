@@ -13,15 +13,35 @@ import shopIcon from "../resources/icon-24-shop.svg";
 import "./Layout.css";
 
 class Layout extends Component {
-  state = {
-    items: [],
-    posts: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      customerId: 1,
+      items: [],
+      posts: [],
+    };
+
+    // Binding functions
+    this.nextUser = this.nextUser.bind(this);
+    this.prevUser = this.prevUser.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+  }
 
   componentDidMount() {
+    this.fetchData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.customerId !== prevState.customerId) {
+      this.fetchData();
+    }
+  }
+
+  fetchData() {
     let urlArray = [
-      "https://jsonplaceholder.typicode.com/users/1",
-      "https://jsonplaceholder.typicode.com/posts?userId=1",
+      "https://jsonplaceholder.typicode.com/users/" + this.state.customerId,
+      "https://jsonplaceholder.typicode.com/posts?userId=" +
+        this.state.customerId,
     ];
 
     let dataPromises = urlArray.map((link) => axios.get(link));
@@ -33,7 +53,13 @@ class Layout extends Component {
           posts: response[1].data,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+
+        if (err.response.status === 404) {
+          this.prevUser();
+        }
+      });
   }
 
   preparePosts(posts) {
@@ -47,6 +73,37 @@ class Layout extends Component {
     return [count, postDetails];
   }
 
+  extractFirstName() {
+    const nameArray = this.state.items.name.split(" ");
+
+    if (nameArray.length == 2) {
+      return nameArray[0];
+    } else {
+      return nameArray[1];
+    }
+  }
+
+  nextUser() {
+    console.log(this.state.customerId);
+    let nextCustomer = this.state.customerId;
+    nextCustomer++;
+    this.setState((state) => ({
+      customerId: nextCustomer,
+      items: [],
+      posts: [],
+    }));
+  }
+
+  prevUser() {
+    let prevCustomer = this.state.customerId;
+    prevCustomer--;
+    this.setState((state) => ({
+      customerId: prevCustomer,
+      items: [],
+      posts: [],
+    }));
+  }
+
   render() {
     const isFetched = this.state.items.name != undefined;
 
@@ -56,6 +113,16 @@ class Layout extends Component {
     // the loading message
 
     if (isFetched) {
+      // Check if we have exceed the list of customers
+      // Go back 1 user if we did so
+
+      if (this.state.items.name == undefined) {
+        this.prevUser();
+      }
+
+      // Extract first name
+      const firstName = this.extractFirstName();
+
       // Prepare the zipcode to append
       let zipcode = this.state.items.address.zipcode.split("-");
       zipcode = zipcode[0];
@@ -85,6 +152,11 @@ class Layout extends Component {
       layout = (
         <div>
           <div id="left-box">
+            {this.state.customerId == 1 ? null : (
+              <button id="prev-button" onClick={this.prevUser}>
+                Previous Customer
+              </button>
+            )}
             <div id="cd">
               <img id="image" src={customerImage}></img>
               <div id="desc">
@@ -108,9 +180,12 @@ class Layout extends Component {
             </div>
           </div>
           <div id="right-box">
+            <button id="next-button" onClick={this.nextUser}>
+              Next Customer
+            </button>
             <div id="cp">
               <div id="inner-cp">
-                <h1>{this.state.items.name.split(" ")[0] + "'s Posts"}</h1>
+                <h1>{firstName + "'s Posts"}</h1>
                 <h4>{results[0]} POSTS</h4>
                 {results[1].map((post, index) => {
                   return (
