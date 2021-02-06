@@ -97,3 +97,15 @@
   margin-left: 5%;
   margin-right: 5%;
 }
+
+#next-button {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+}
+
+#prev-button {
+  position: absolute;
+  left: 5px;
+  top: 10px;
+}
