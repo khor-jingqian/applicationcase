@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import CustomerDetails from "./CustomerDetails";
-import CustomerPosts from "./CustomerPosts";
+import Post from "./Post";
 
 import customerImage from "../resources/image.jpg";
 import loading from "../resources/loading.svg";
 import category from "../resources/category.png";
-// import { ReactComponent as PhoneIcon } from "../resources/icon-24-phone.svg";
 import shopIcon from "../resources/icon-24-shop.svg";
+import phoneIcon from "../resources/phone.svg";
 
 import "./Layout.css";
 
@@ -37,6 +36,10 @@ class Layout extends Component {
     }
   }
 
+  /**
+   * Fetches the customer data from the URL given.
+   */
+
   fetchData() {
     let urlArray = [
       "https://jsonplaceholder.typicode.com/users/" + this.state.customerId,
@@ -56,22 +59,38 @@ class Layout extends Component {
       .catch((err) => {
         console.log(err);
 
+        // If the error response status is 404,
+        // this means that we are at the end of the
+        // customer list, so go back one user.
+
         if (err.response.status === 404) {
           this.prevUser();
         }
       });
   }
 
+  /**
+   * Prepares the posts to be appended for the customer.
+   * @param {*} posts: Array containing all the posts of customer.
+   */
+
   preparePosts(posts) {
     let count = 0;
     let postDetails = [];
     while (this.state.posts[count] != undefined) {
-      postDetails[count] = [posts[count].title, posts[count].body];
+      let title = posts[count].title;
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+      postDetails[count] = [title, posts[count].body];
       count++;
     }
 
     return [count, postDetails];
   }
+
+  /**
+   * Extracts the first name of every customer, regardless
+   * of if the customer has 2 or 3 words in his/her name.
+   */
 
   extractFirstName() {
     const nameArray = this.state.items.name.split(" ");
@@ -83,8 +102,32 @@ class Layout extends Component {
     }
   }
 
+  /**
+   * Prepares the tags of the customer in the appropriate
+   * format.
+   */
+
+  prepareTags() {
+    let tagResult = "";
+    let tags = this.state.items.company.bs;
+    tags = tags.split(" ");
+
+    for (let t in tags) {
+      let interim = tags[t].charAt(0).toUpperCase() + tags[t].slice(1);
+      tagResult = tagResult + interim + " ";
+    }
+
+    tagResult = tagResult.trim();
+    tagResult = tagResult.replace(/ /g, " \u2022 ");
+
+    return tagResult;
+  }
+
+  /**
+   * Sets the state to the next user when called.
+   */
+
   nextUser() {
-    console.log(this.state.customerId);
     let nextCustomer = this.state.customerId;
     nextCustomer++;
     this.setState((state) => ({
@@ -93,6 +136,10 @@ class Layout extends Component {
       posts: [],
     }));
   }
+
+  /**
+   * Sets the state to the previous user when called.
+   */
 
   prevUser() {
     let prevCustomer = this.state.customerId;
@@ -106,6 +153,8 @@ class Layout extends Component {
 
   render() {
     const isFetched = this.state.items.name != undefined;
+    const isMobile = window.innerWidth <= 640;
+    const isFirstCustomer = this.state.customerId == 1;
 
     let layout;
 
@@ -132,45 +181,48 @@ class Layout extends Component {
       phone = phone[0].trim();
 
       // Prepare tags to append
-      let tagResult = "";
-      let tags = this.state.items.company.bs;
-      tags = tags.split(" ");
+      let tagResult = this.prepareTags();
 
-      for (let t in tags) {
-        let interim = tags[t].charAt(0).toUpperCase() + tags[t].slice(1);
-        tagResult = tagResult + interim + " ";
-      }
-
-      tagResult = tagResult.trim();
-      tagResult = tagResult.replace(/ /g, " \u2022 ");
-
-      // Prepare posts to append into
-      // CustomerPosts
-
+      // Prepare posts to append into CustomerPosts
       const results = this.preparePosts(this.state.posts);
 
       layout = (
         <div>
-          <div id="left-box">
-            {this.state.customerId == 1 ? null : (
-              <button id="prev-button" onClick={this.prevUser}>
+          <div id="left-box" style={{ width: isMobile ? "100vw" : "50vw" }}>
+            {isFirstCustomer ? null : (
+              <button
+                id="prev-button"
+                onClick={this.prevUser}
+                style={{ position: isMobile ? "relative" : "absolute" }}
+              >
                 Previous Customer
               </button>
             )}
+
+            {isMobile ? (
+              <button
+                id="next-button"
+                onClick={this.nextUser}
+                style={{ position: isFirstCustomer ? "relative" : "absolute" }}
+              >
+                Next Customer
+              </button>
+            ) : null}
             <div id="cd">
               <img id="image" src={customerImage}></img>
               <div id="desc">
                 <h1>{this.state.items.name}</h1>
                 <div className="entry">
-                  <p>{phone}</p>
+                  <img src={phoneIcon} className="icons"></img>
+                  <p className="tag-desc">{phone}</p>
                 </div>
                 <div className="entry">
                   <img src={category} id="category" className="icons"></img>
-                  <p id="tag">{tagResult}</p>
+                  <p className="tag-desc">{tagResult}</p>
                 </div>
                 <div className="entry">
                   <img src={shopIcon} className="icons"></img>
-                  <p id="address">
+                  <p className="tag-desc">
                     {this.state.items.address.street},{" "}
                     {this.state.items.address.suite},{" "}
                     {this.state.items.address.city} {zipcode}
@@ -179,21 +231,22 @@ class Layout extends Component {
               </div>
             </div>
           </div>
-          <div id="right-box">
-            <button id="next-button" onClick={this.nextUser}>
-              Next Customer
-            </button>
+
+          <div id="right-box" style={{ width: isMobile ? "100vw" : "50vw" }}>
+            {isMobile ? null : (
+              <button id="next-button" onClick={this.nextUser}>
+                Next Customer
+              </button>
+            )}
             <div id="cp">
               <div id="inner-cp">
                 <h1>{firstName + "'s Posts"}</h1>
-                <h4>{results[0]} POSTS</h4>
-                {results[1].map((post, index) => {
-                  return (
-                    <div key={index} className="post-format">
-                      <h3 className="post-title">{post[0]}</h3>
-                      <p className="post-body">{post[1]}</p>
-                    </div>
-                  );
+                <h4 style={{ color: "gray" }}>{results[0]} POSTS</h4>
+                <p style={{ color: "gray" }}>
+                  Interested in a post? Click on it to read more!
+                </p>
+                {results[1].map((post) => {
+                  return <Post title={post[0]} body={post[1]}></Post>;
                 })}
               </div>
             </div>
@@ -203,8 +256,8 @@ class Layout extends Component {
     } else {
       layout = (
         <div id="loading">
-          <img src={loading}></img>
-          <h1>Information is loading .....</h1>
+          <img src={loading} style={{ width: "30vw", height: "30vh" }}></img>
+          <h2>Information is loading .....</h2>
         </div>
       );
     }

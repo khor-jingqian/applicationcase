@@ -12,7 +12,7 @@
   display: inline-block;
   width: 50vw;
   height: 100vh;
-  background-color: aqua;
+  background-color: beige;
   vertical-align: top;
 }
 
@@ -20,18 +20,26 @@
   height: 89%;
   margin: 5%;
   overflow: auto;
+  background-color: white;
+  border-radius: 15px;
+  border: transparent;
+  box-shadow: 5px 10px lightgray;
 }
 
 #cd {
   height: 89%;
   margin: 5%;
   overflow: auto;
+  background-color: white;
+  border-radius: 15px;
+  border: transparent;
+  box-shadow: 5px 10px lightgray;
 }
 
 #image {
   width: 100%;
   height: 40%;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid lightgray;
 }
 
 #desc {
@@ -43,24 +51,8 @@
   text-align: center;
 }
 
-#phone-icon {
+.tag-desc {
   display: inline;
-  width: 500;
-  height: 500;
-}
-
-#address {
-  display: inline;
-}
-
-/* #category {
-  display: inline;
-  vertical-align: middle;
-} */
-
-#tag {
-  display: inline;
-  vertical-align: middle;
 }
 
 .icons {
@@ -77,25 +69,6 @@
 
 #inner-cp {
   margin: 5%;
-}
-
-.post-format {
-  border: 1px solid;
-  margin: 5%;
-  /* padding: 2%; */
-}
-
-.post-title {
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
-.post-body {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-left: 5%;
-  margin-right: 5%;
 }
 
 #next-button {
