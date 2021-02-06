@@ -18,3 +18,12 @@ Objectives completed:
 <li>Basic Mobile responsiveness implemented, tested on Firefox and Google Chrome. After adjusting the dimensions, please refresh the page for the adjustments to take effect. </li>
 <li>Hosted the website for preview using Github Pages.</li>
 </ol>
+
+Acknowledgements:
+
+<ol>
+
+<li><a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">Phone icon from bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div></li>
+<li><a href="https://www.freepik.com" title="Freepik">Loading icon from Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></li>
+
+</ol>
